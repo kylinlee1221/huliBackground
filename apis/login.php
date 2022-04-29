@@ -4,6 +4,7 @@
     require('./include/server.php');
     $username=$_GET['username'];
     $password=$_GET['password'];
+    $password=md5($password);
     $result=array(
         'status' => '0',//1=login success,2=password error
         'fullname' => 'null',
@@ -11,6 +12,7 @@
         'telephone' => '0',
         'role' => '9', //0=user,1=admin
         'description' => 'null',
+        'id' => '0',
     );
     if(!$conn){
         //echo "<script>alert('sql connect error')</script>";
@@ -28,6 +30,7 @@
                     $result['telephone']=$row['telephone'];
                     $result['role']=$row['role'];
                     $result['description']=$row['description'];
+                    $result['userid']=$row['id'];
                 }
                 echo json_encode($result,JSON_UNESCAPED_UNICODE);
             }else{
