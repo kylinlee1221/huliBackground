@@ -12,6 +12,7 @@
         'orderprice' => '0.0',
         'orderpaid' => '0.0',
         'orderend' => 'null',
+        'status' => '0',// 	0=unavailable,1=available,2=on work,3=refuse,4=done
     );
     if(!$conn){
         echo "empty";
@@ -28,7 +29,16 @@
                         $row_result['orderprice']=$row['order_money'];
                         $row_result['orderpaid']=$row['order_paid'];
                         $row_result['orderend']=$row['order_end'];
-                        array_push($result,$row_result);
+                        $sql_query2="SELECT * FROM `order_status_table` WHERE `orderid` = $orderid ";
+                        //echo $sql_query2;
+                        $res2=mysqli_query($conn,$sql_query2);
+                        //echo mysqli_error($conn);
+                        if($res2->num_rows>0){
+                            while($row2=$res2->fetch_assoc()){
+                                $row_result['status']=$row2['orderstatus'];
+                                array_push($result,$row_result);
+                            }
+                        }
                     }
                 }
                 echo json_encode($result,JSON_UNESCAPED_UNICODE);
